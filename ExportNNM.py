@@ -70,8 +70,7 @@ def make_weights_array(model_to_save, output_scaling_gain=1.0):
           c2 = np.flip(layer.get_weights()[0].flatten())
           nnm[1152+32+17+3+128:1152+32+17+3+128+2048] = c2
 
-    return nnm  
-
+    return nnm
 
 def export_model_to_nnm(filename, output_scaling_gain, dc_value, model_to_save, model_type = 0, model_name='Untitled', cab_name='Untitled'):
     model_name = model_name.ljust(31)[:31]
