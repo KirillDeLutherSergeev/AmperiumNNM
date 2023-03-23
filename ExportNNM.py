@@ -18,6 +18,19 @@ class THeader(Structure):
     def __init__(self):
         self.header = b'NNM1'
 
+def BlockSize(n):
+    return 2**math.ceil(math.log2(n))
+
+def MPT(x, q = 8):
+    l = x.size
+    bs = BlockSize(q * l)
+    hbs = int(bs/2)
+    Hk = np.fft.fft(np.pad(x,bs))
+    cn = np.fft.ifft(np.log(np.abs(Hk)))
+    cn[1:hbs-1] *= 2
+    cn[hbs+1:] = 0
+    return np.fft.ifft(np.exp(np.fft.fft(cn)))[:l]        
+        
 def make_weights_array(model_to_save, output_scaling_gain=1.0):
     nnm = np.zeros(3432, c_float)
 
