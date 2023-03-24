@@ -1,3 +1,7 @@
+import os
+from scipy.io import wavfile
+import numpy as np
+
 def save_wav(name, data, fs = 44100):
     wavfile.write(name, fs, data.flatten().astype(np.float32))
 
