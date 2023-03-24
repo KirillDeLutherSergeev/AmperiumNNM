@@ -34,7 +34,7 @@ def calculate_peak_db(signal):
     peak_db = linear_2_db(data_max)
     return peak_db
 
-def load_audio_data(inFile, outFile, offsetSec=5, offsetSmps=0, delay=0, normalize=True)
+def load_audio_data(inFile, outFile, offsetSec=5, offsetSmps=0, delay=0, normalize=True):
     # Load and Preprocess Data ###########################################
     in_rate, in_data = wavfile.read(inFile)
     out_rate, out_data = wavfile.read(outFile)
@@ -56,7 +56,7 @@ def load_audio_data(inFile, outFile, offsetSec=5, offsetSmps=0, delay=0, normali
 
     return(x_all.reshape(len(x_all),1), y_all.reshape(len(y_all),1))
 
-def check_if_model_exists(name, modelPath='models/')
+def check_if_model_exists(name, modelPath='models/'):
     if not os.path.exists(modelPath+name):
         os.makedirs(modelPath+name)
     else:
