@@ -58,7 +58,10 @@ def load_audio_data(inFile, outFile, offsetSec=5, offsetSmps=0, delay=0, normali
         x_all = normalize_max_peak(x_all)
         y_all = normalize_at_minus_6dB(y_all)
 
-    return(x_all.reshape(len(x_all),1), y_all.reshape(len(y_all),1))
+    x_all = x_all.reshape(len(x_all),1)
+    y_all = y_all.reshape(len(y_all),1)
+
+    return(x_all, y_all)
 
 def check_if_model_exists(name, modelPath='models/'):
     if not os.path.exists(modelPath+name):

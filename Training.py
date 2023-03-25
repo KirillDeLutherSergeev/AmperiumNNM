@@ -87,15 +87,15 @@ def prepare_dataset(x_all, y_all, numSteps = 2048, trainSize=0.8, overlap=256, b
     trainObservations = int(x_train.shape[0] / batchSize) * batchSize
     testObservations = int(x_test.shape[0] / batchSize) * batchSize
 
-    x_train = x_train[:trainObservations]
-    y_train = y_train[:trainObservations]
-    x_test = x_test[:testObservations]
-    y_test = y_test[:testObservations]
+    x_train = x_train[:trainObservations].reshape(x_train.shape[0], x_train.shape[1], 1)
+    y_train = y_train[:trainObservations].reshape(y_train.shape[0], y_train.shape[1], 1)
+    x_test = x_test[:testObservations].reshape(x_test.shape[0], x_test.shape[1], 1)
+    y_test = y_test[:testObservations].reshape(y_test.shape[0], y_test.shape[1], 1)
 
-    x_train = x_train.reshape(x_train.shape[0], x_train.shape[1], 1)
-    y_train = y_train.reshape(y_train.shape[0], y_train.shape[1], 1)
-    x_test = x_test.reshape(x_test.shape[0], x_test.shape[1], 1)
-    y_test = y_test.reshape(y_test.shape[0], y_test.shape[1], 1)    
+    #x_train = x_train.reshape(x_train.shape[0], x_train.shape[1], 1)
+    #y_train = y_train.reshape(y_train.shape[0], y_train.shape[1], 1)
+    #x_test = x_test.reshape(x_test.shape[0], x_test.shape[1], 1)
+    #y_test = y_test.reshape(y_test.shape[0], y_test.shape[1], 1)    
     
     return(x_train, y_train, x_test, y_test)
 
