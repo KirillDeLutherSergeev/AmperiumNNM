@@ -43,7 +43,7 @@ def build_model(useD1=True, useC1=True, useC2=True, loss='mae', learningRate=0.0
             activation='tanh',
             name='D1'))
 
-    if useC2:
+    if useC1:
         conv_init = np.zeros(conv1Size)
         conv_init[0] = 1.0
         model.add(Conv1D(filters=1, kernel_size=conv1Size,
