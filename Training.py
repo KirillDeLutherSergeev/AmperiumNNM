@@ -110,5 +110,3 @@ def train_model(x_train, y_train, x_test, y_test, model, epochs=8):
     earlystop_clbk = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=3)
 
     history = model.fit(x=x_train,y=y_train, validation_data=(x_test, y_test), epochs=epochs, callbacks=[scheduler_clbk, plateu_clbk, earlystop_clbk], shuffle=True)
-
-    model.save('models/'+name+'/'+name+'_data.h5', include_optimizer=False)
