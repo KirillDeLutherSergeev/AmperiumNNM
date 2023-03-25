@@ -4,6 +4,7 @@ from enum import IntEnum
 import struct
 import tensorflow as tf
 import numpy as np
+import math
 
 class THeader(Structure):
     _fields_ = [
