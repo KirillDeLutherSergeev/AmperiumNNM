@@ -38,7 +38,7 @@ def calculate_peak_db(signal):
     peak_db = linear_2_db(data_max)
     return peak_db
 
-def load_audio_data(inFile, outFile, offsetSec=5, offsetSmps=0, delay=0, normalize=True):
+def load_audio_data(inFile, outFile, offsetSec=5, offsetSmps=0, delay=0):
     # Load and Preprocess Data ###########################################
     in_rate, in_data = wavfile.read(inFile)
     out_rate, out_data = wavfile.read(outFile)
@@ -54,12 +54,8 @@ def load_audio_data(inFile, outFile, offsetSec=5, offsetSmps=0, delay=0, normali
     y_all = out_data.astype(np.float32).flatten() 
     y_all = y_all[offset-delay:]
 
-    if normalize:
-        x_all = normalize_max_peak(x_all)
-        y_all = normalize_at_minus_6dB(y_all)
-
-    x_all = x_all.reshape(len(x_all),1)
-    y_all = y_all.reshape(len(y_all),1)
+    x_all = normalize_max_peak(x_all).reshape(len(x_all),1)
+    y_all = normalize_at_minus_6dB(y_all).reshape(len(y_all),1)
 
     return(x_all, y_all)
 
