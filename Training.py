@@ -1,4 +1,11 @@
 from AudioUtils import *
+import numpy as np
+import math
+import tensorflow as tf
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import LSTM, Conv1D, Dense, InputLayer
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.backend import clear_session
 
 def partition_data(input, output, sequenceLength, trainTestRatio=0.8, overlap=256):
     numSamples = np.minimum(input.shape[0], output.shape[0])
@@ -98,14 +105,11 @@ def scheduler(epoch, lr):
         return lr * 0.95
     return lr
 
-x_train, y_train, x_test, y_test = prepare_dataset(x_all, y_all, numSteps, trainSize, overlap, batchSize)
+def train_model(x_train, y_train, x_test, y_test, model, epochs=8):
+    scheduler_clbk = tf.keras.callbacks.LearningRateScheduler(scheduler)
+    plateu_clbk = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=5, min_lr=0.001)
+    earlystop_clbk = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=3)
 
-#model = build_model()
+    history = model.fit(x=x_train,y=y_train, validation_data=(x_test, y_test), epochs=epochs, callbacks=[scheduler_clbk, plateu_clbk, earlystop_clbk], shuffle=True)
 
-scheduler_clbk = tf.keras.callbacks.LearningRateScheduler(scheduler)
-plateu_clbk = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=5, min_lr=0.001)
-earlystop_clbk = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=3)
-
-history = model.fit(x=x_train,y=y_train, validation_data=(x_test, y_test), epochs=epochs, callbacks=[scheduler_clbk, plateu_clbk, earlystop_clbk], shuffle=True)
-
-model.save('models/'+name+'/'+name+'_data.h5', include_optimizer=False)
+    model.save('models/'+name+'/'+name+'_data.h5', include_optimizer=False)
