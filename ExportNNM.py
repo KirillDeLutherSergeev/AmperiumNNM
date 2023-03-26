@@ -60,16 +60,16 @@ def make_weights_array(model_to_save, output_scaling_gain=1.0):
     for num_layer, layer in enumerate(model_to_save.layers):
       if isinstance(layer, tf.keras.layers.Conv1D):
         if layer.name == 'C1':
-          c1 = layer.get_weights()[0].flatten()
-          nnm[1152+32+17+3:1152+32+17+3+128] = MPT(c1)
+          c1 = MPT(layer.get_weights()[0].flatten())
+          nnm[1152+32+17+3:1152+32+17+3+128] = np.flip(c1)
 
     nnm[1152+32+17+3+128] = 1;
 
     for num_layer, layer in enumerate(model_to_save.layers):
       if isinstance(layer, tf.keras.layers.Conv1D):
         if layer.name == 'C2':
-          c2 = layer.get_weights()[0].flatten()
-          nnm[1152+32+17+3+128:1152+32+17+3+128+2048] = MPT(c2)
+          c2 = MPT(layer.get_weights()[0].flatten())
+          nnm[1152+32+17+3+128:1152+32+17+3+128+2048] = c2
 
     return nnm
 
