@@ -1,2 +1,2 @@
 # AmperiumNNM
-Amperium neural training
+Amperium neural training using Keras
