@@ -104,9 +104,50 @@ def scheduler(epoch, lr):
         return lr * 0.95
     return lr
 
-def train_model(x_train, y_train, x_test, y_test, model, epochs=8):
+class ModelSaverCallback(keras.callbacks.Callback):
+
+    def init(self, initial_model, epochs, numbatches):
+        self.best_val_loss = 1000
+        self.best_val_mse = 1000
+        self.current_epoch = 0
+        self.epochs = epochs
+        self.num_batches = numbatches
+        self.batch = 0
+        self.count = 0
+        self.best_model = clone_model(initial_model)
+
+    def on_train_batch_end(self, batch, logs=None):
+        self.batch = batch
+        self.count += 1
+        if self.count > 10:
+            self.count = 0
+            print(('train progress: {:3.3f} '.format(float(batch / num_batches))))
+
+    def return_best_model(self):
+        return self.best_model
+
+    def on_epoch_begin(self, epoch, logs=None):
+        self.current_epoch = epoch
+        print(epoch, ('epoch progress: {:3.3f} '.format(float(epoch / num_epochs))))
+
+    def on_epoch_end(self, epoch, logs=None):
+        if logs['val_loss'] < self.best_val_loss:
+            self.best_val_loss = logs['val_loss']
+            self.best_val_mse = logs['val_mse']
+            self.best_model.set_weights(self.model.get_weights())
+            print(('  Train Loss: {:3.6f} '.format(logs['loss'])))
+            print(('  Train mse: {:3.6f}'.format(logs['mse'])))
+            print(('  Val Loss: {:3.6f} '.format(logs['val_loss'])))
+            print(('  Val mse: {:3.6f} '.format(logs['val_mse'])))
+
+def train_model(x_train, y_train, x_test, y_test, model, epochs=8, batchSize=64):
     scheduler_clbk = tf.keras.callbacks.LearningRateScheduler(scheduler)
     plateu_clbk = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=5, min_lr=0.001)
-    earlystop_clbk = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=3)
-
-    history = model.fit(x=x_train,y=y_train, validation_data=(x_test, y_test), epochs=epochs, callbacks=[scheduler_clbk, plateu_clbk, earlystop_clbk], shuffle=True)
+    earlystop_clbk = tf.keras.callbacks.EarlyStopping(monitor='val_loss', mode='auto', patience=5, verbose=1)
+    modelSaver_clbk = ModelSaverCallback(initial_model=model, epochs=num_epochs, numbatches=num_batches)
+    
+    history = model.fit(x=x_train,y=y_train, validation_data=(x_test, y_test),
+        epochs=epochs, 
+        verbose=0,
+        batch_size=batchSize,
+        callbacks=[scheduler_clbk, plateu_clbk, earlystop_clbk, modelSaver_clbk], shuffle=True)
