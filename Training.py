@@ -146,7 +146,8 @@ def train_model(x_train, y_train, x_test, y_test, model, epochs=8, batchSize=64)
     scheduler_clbk = tf.keras.callbacks.LearningRateScheduler(scheduler)
     plateu_clbk = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=5, min_lr=0.001)
     earlystop_clbk = tf.keras.callbacks.EarlyStopping(monitor='val_loss', mode='auto', patience=5, verbose=1)
-    modelSaver_clbk = ModelSaverCallback(initial_model=model, epochs=epochs, numbatches=numBatches)
+    #modelSaver_clbk = ModelSaverCallback(initial_model=model, epochs=epochs, numbatches=numBatches)
+    modelSaver_clbk = ModelSaverCallback(model, epochs, numBatches)
     
     history = model.fit(x=x_train,y=y_train, validation_data=(x_test, y_test),
         epochs=epochs, 
