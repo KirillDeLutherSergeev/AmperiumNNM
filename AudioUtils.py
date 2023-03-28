@@ -51,8 +51,13 @@ def load_audio_data(inFile, outFile, offsetSec=5, offsetSmps=0, delay=0):
     x_all = in_data.astype(np.float32).flatten()
     x_all = x_all[offset:]  
 
-    y_all = out_data.astype(np.float32).flatten() 
-    y_all = y_all[offset-delay:]
+    y_all = out_data.astype(np.float32).flatten()
+
+    offsetOut = offset-delay
+    if offsetOut < 0:
+        offsetOut = 0
+        
+    y_all = y_all[offsetOut:]
 
     x_all = normalize_max_peak(x_all).reshape(len(x_all),1)
     y_all = normalize_at_minus_6dB(y_all).reshape(len(y_all),1)
