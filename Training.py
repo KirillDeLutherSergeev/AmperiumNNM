@@ -121,14 +121,14 @@ class ModelSaverCallback(tf.keras.callbacks.Callback):
         self.count += 1
         if self.count > 10:
             self.count = 0
-            print(('train progress: {:3.3f} '.format(float(batch / num_batches))))
+            print(('train progress: {:3.3f} '.format(float(self.batch / self.num_batches))))
 
     def return_best_model(self):
         return self.best_model
 
     def on_epoch_begin(self, epoch, logs=None):
         self.current_epoch = epoch
-        print(epoch, ('epoch progress: {:3.3f} '.format(float(epoch / num_epochs))))
+        print(epoch, ('epoch progress: {:3.3f} '.format(float(epoch / self.num_epochs))))
 
     def on_epoch_end(self, epoch, logs=None):
         if logs['val_loss'] < self.best_val_loss:
