@@ -120,17 +120,12 @@ class ModelSaverCallback(tf.keras.callbacks.Callback):
 
     def on_epoch_begin(self, epoch, logs=None):
         self.current_epoch = epoch
-        print(epoch, ('epoch progress: {:3.3f} '.format(float(epoch / self.num_epochs))))
 
     def on_epoch_end(self, epoch, logs=None):
         if logs['val_loss'] < self.best_val_loss:
             self.best_val_loss = logs['val_loss']
             self.best_val_mse = logs['val_mse']
             self.best_model.set_weights(self.model.get_weights())
-            print(('  Train Loss: {:3.6f} '.format(logs['loss'])))
-            print(('  Train mse: {:3.6f}'.format(logs['mse'])))
-            print(('  Val Loss: {:3.6f} '.format(logs['val_loss'])))
-            print(('  Val mse: {:3.6f} '.format(logs['val_mse'])))
 
 def train_model(x_train, y_train, x_test, y_test, model, epochs=8, batchSize=64):
     scheduler_clbk = tf.keras.callbacks.LearningRateScheduler(scheduler)
