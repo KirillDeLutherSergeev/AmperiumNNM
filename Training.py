@@ -110,7 +110,7 @@ class ModelSaverCallback(tf.keras.callbacks.Callback):
         self.best_val_loss = 1000
         self.best_val_mse = 1000
         self.current_epoch = 0
-        self.epochs = epochs
+        self.num_epochs = epochs
         self.num_batches = numbatches
         self.batch = 0
         self.count = 0
