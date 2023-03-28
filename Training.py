@@ -104,7 +104,7 @@ def scheduler(epoch, lr):
         return lr * 0.95
     return lr
 
-class ModelSaverCallback(keras.callbacks.Callback):
+class ModelSaverCallback(tf.keras.callbacks.Callback):
 
     def init(self, initial_model, epochs, numbatches):
         self.best_val_loss = 1000
