@@ -133,8 +133,6 @@ class ModelSaverCallback(tf.keras.callbacks.Callback):
             print(('  Val mse: {:3.6f} '.format(logs['val_mse'])))
 
 def train_model(x_train, y_train, x_test, y_test, model, epochs=8):
-    numBatches = int(np.shape(x_train)[0] / batchSize)
-
     scheduler_clbk = tf.keras.callbacks.LearningRateScheduler(scheduler)
     plateu_clbk = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=5, min_lr=0.001)
     earlystop_clbk = tf.keras.callbacks.EarlyStopping(monitor='val_loss', mode='auto', patience=5, verbose=1)
