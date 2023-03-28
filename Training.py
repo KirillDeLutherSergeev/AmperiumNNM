@@ -138,3 +138,5 @@ def train_model(x_train, y_train, x_test, y_test, model, epochs=8, batchSize=64)
         verbose=1,
         batch_size=batchSize,
         callbacks=[scheduler_clbk, plateu_clbk, earlystop_clbk, modelSaver_clbk], shuffle=True)
+
+    model = modelSaver_clbk.return_best_model()
