@@ -114,7 +114,7 @@ class ModelSaverCallback(tf.keras.callbacks.Callback):
         self.num_batches = numbatches
         self.batch = 0
         self.count = 0
-        self.best_model = clone_model(initial_model)
+        self.best_model = initial_model
 
     def on_train_batch_end(self, batch, logs=None):
         self.batch = batch
