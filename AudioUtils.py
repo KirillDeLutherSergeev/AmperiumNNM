@@ -43,6 +43,8 @@ def load_audio_data(inFile, outFile, offsetSec=5, offsetSmps=0, delay=0):
     in_rate, in_data = wavfile.read(inFile)
     out_rate, out_data = wavfile.read(outFile)
 
+    assert in_rate != out_rate, "Mismatched sample rates"
+
     if offsetSec != 0:
         offset = offsetSec * in_rate
     else:
@@ -62,7 +64,7 @@ def load_audio_data(inFile, outFile, offsetSec=5, offsetSmps=0, delay=0):
     x_all = normalize_max_peak(x_all).reshape(len(x_all),1)
     y_all = normalize_at_minus_6dB(y_all).reshape(len(y_all),1)
 
-    return(x_all, y_all)
+    return(x_all, y_all, in_rate)
 
 def check_if_model_exists(name, modelPath='models/'):
     if not os.path.exists(modelPath+name):
