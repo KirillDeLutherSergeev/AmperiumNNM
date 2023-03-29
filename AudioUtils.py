@@ -43,7 +43,7 @@ def load_audio_data(inFile, outFile, offsetSec=5, offsetSmps=0, delay=0):
     in_rate, in_data = wavfile.read(inFile)
     out_rate, out_data = wavfile.read(outFile)
 
-    assert in_rate != out_rate, "Mismatched sample rates"
+    assert in_rate == out_rate, "Mismatched sample rates"
 
     if offsetSec != 0:
         offset = offsetSec * in_rate
