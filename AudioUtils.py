@@ -1,6 +1,7 @@
 import os
 from scipy.io import wavfile
 import numpy as np
+import math
 
 def save_wav(name, data, fs = 44100):
     wavfile.write(name, fs, data.flatten().astype(np.float32))
@@ -46,7 +47,7 @@ def load_audio_data(inFile, outFile, offsetSec=5, offsetSmps=0, delay=0):
     assert in_rate == out_rate, "Mismatched sample rates"
 
     if offsetSec != 0:
-        offset = offsetSec * in_rate
+        offset = math.floor(offsetSec * in_rate)
     else:
         offset = offsetSmps
 
