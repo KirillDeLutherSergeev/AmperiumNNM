@@ -90,7 +90,7 @@ def export_model_to_nnm(filename, output_scaling_gain, dc_value, model_to_save, 
 
     file.close()
 
-def get_type_id(typeID, sampleRate = 44100)
+def get_type_id(typeID, sampleRate = 44100):
   outID = typeID
 
   if sampleRate == 48000:
