@@ -29,6 +29,12 @@ def partition_data(input, output, sequenceLength, trainTestRatio=0.8, overlap=25
 
     return (trainInput, trainOutput, testInput, testOutput)
 
+def HiPass(x, coeff=0.85):
+    return tf.concat([x[:, 0:1, :], x[:, 1:, :] - coeff * x[:, :-1, :]], axis=1)
+
+def LowPass(x, coeff=0.85):
+    return tf.concat([x[:, 0:1, :], x[:, 1:, :] + coeff * x[:, :-1, :]], axis=1)
+
 def esr(target_y, predicted_y): 
     return K.sum(tf.pow(target_y - predicted_y, 2), axis=0) / (K.sum(tf.pow(target_y, 2), axis=0) + 1e-10)
 
