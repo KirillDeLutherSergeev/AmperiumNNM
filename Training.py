@@ -83,7 +83,7 @@ def build_model(useD1=True, useC1=True, useC2=True, loss='mae', learningRate=0.0
             use_bias=False,
             name='C2'))
 
-    model.compile(optimizer=Adam(learning_rate=learningRate, epsilon=epsilon), loss=loss, metrics=['mse', esr_loss])
+    model.compile(optimizer=Adam(learning_rate=learningRate, epsilon=epsilon), loss=loss, metrics=[esr_loss])
 
     model.summary()
 
