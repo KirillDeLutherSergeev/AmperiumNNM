@@ -29,10 +29,10 @@ def partition_data(input, output, sequenceLength, trainTestRatio=0.8, overlap=25
 
     return (trainInput, trainOutput, testInput, testOutput)
 
-def esr_loss(y_true, y_pred): 
-    return K.sum(tf.pow(y_true - y_pred, 2), axis=0) / (K.sum(tf.pow(y_true, 2), axis=0) + 1e-10)
+def esr(target_y, predicted_y): 
+    return K.sum(tf.pow(target_y - predicted_y, 2), axis=0) / (K.sum(tf.pow(target_y, 2), axis=0) + 1e-10)
 
-def build_model(useD1=True, useC1=True, useC2=True, loss='mae', learningRate=0.008, epsilon=1.e-08, hiddenSize=16, conv1Size=128, conv2Size=2048):
+def build_model(useD1=True, useC1=True, useC2=True, loss='mse', learningRate=0.008, epsilon=1.e-08, hiddenSize=16, conv1Size=128, conv2Size=2048):
     # Create Sequential Model ###########################################
     clear_session()
 
@@ -79,7 +79,7 @@ def build_model(useD1=True, useC1=True, useC2=True, loss='mae', learningRate=0.0
             use_bias=False,
             name='C2'))
 
-    model.compile(optimizer=Adam(learning_rate=learningRate, epsilon=epsilon), loss=loss, metrics=['mse', esr_loss])
+    model.compile(optimizer=Adam(learning_rate=learningRate, epsilon=epsilon), loss=loss, metrics=[esr])
 
     model.summary()
 
@@ -112,8 +112,7 @@ class ModelSaverCallback(tf.keras.callbacks.Callback):
 
     def __init__(self, initial_model, epochs):
         self.best_val_loss = 1000
-        self.best_val_mse = 1000
-        self.best_val_esr_loss = 1000
+        self.best_val_esr = 1000
         self.current_epoch = 0
         self.num_epochs = epochs
         self.batch = 0
@@ -129,8 +128,7 @@ class ModelSaverCallback(tf.keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs=None):
         if logs['val_loss'] < self.best_val_loss:
             self.best_val_loss = logs['val_loss']
-            self.best_val_mse = logs['val_mse']
-            self.best_val_esr_loss = logs['esr_loss']
+            self.best_val_esr = logs['val_esr']
             self.best_model.set_weights(self.model.get_weights())
 
 def train_model(x_train, y_train, x_test, y_test, model, epochs=8, batchSize=64):
