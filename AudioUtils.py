@@ -60,7 +60,7 @@ def load_audio_data(inFile, outFile, offsetSec=1, delay=0):
     y_all = y_all[offsetOut:]
 
     x_all = normalize_max_peak(x_all).reshape(len(x_all),1)
-    y_all = normalize_at_minus_6dB(y_all).reshape(len(y_all),1)
+    y_all = normalize_at_minus_3dB(y_all).reshape(len(y_all),1)
 
     return(x_all, y_all, in_rate)
 
