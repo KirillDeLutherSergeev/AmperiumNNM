@@ -5,6 +5,7 @@ from tensorflow.keras import Sequential
 from tensorflow.keras.layers import LSTM, Conv1D, Dense, InputLayer
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.backend import clear_session
+import tensorflow.keras.backend as K
 
 def partition_data(input, output, sequenceLength, trainTestRatio=0.8, overlap=256):
     numSamples = np.minimum(input.shape[0], output.shape[0])
@@ -27,6 +28,10 @@ def partition_data(input, output, sequenceLength, trainTestRatio=0.8, overlap=25
     testOutput = np.array(batchedOutput[trainLength:])
 
     return (trainInput, trainOutput, testInput, testOutput)
+
+def esr_loss(target_y, predicted_y):
+    mse = tf.keras.losses.MeanSquaredError() 
+    return mse(target_y - predicted_y) / (tf.math.reduce_sum(tf.math.pow(tf.math.abs(y_true), 2)) + 1e-10)
 
 def build_model(useD1=True, useC1=True, useC2=True, loss='mae', learningRate=0.008, epsilon=1.e-08, hiddenSize=16, conv1Size=128, conv2Size=2048):
     # Create Sequential Model ###########################################
@@ -75,7 +80,7 @@ def build_model(useD1=True, useC1=True, useC2=True, loss='mae', learningRate=0.0
             use_bias=False,
             name='C2'))
 
-    model.compile(optimizer=Adam(learning_rate=learningRate, epsilon=epsilon), loss=loss, metrics='mse')
+    model.compile(optimizer=Adam(learning_rate=learningRate, epsilon=epsilon), loss=loss, metrics=['mse', esr_loss])
 
     model.summary()
 

@@ -39,17 +39,14 @@ def calculate_peak_db(signal):
     peak_db = linear_2_db(data_max)
     return peak_db
 
-def load_audio_data(inFile, outFile, offsetSec=5, offsetSmps=0, delay=0):
+def load_audio_data(inFile, outFile, offsetSec=1, delay=0):
     # Load and Preprocess Data ###########################################
     in_rate, in_data = wavfile.read(inFile)
     out_rate, out_data = wavfile.read(outFile)
 
     assert in_rate == out_rate, "Mismatched sample rates"
 
-    if offsetSec != 0:
-        offset = math.floor(offsetSec * in_rate)
-    else:
-        offset = offsetSmps
+    offset = int(math.floor(offsetSec * in_rate))
 
     x_all = in_data.astype(np.float32).flatten()
     x_all = x_all[offset:]  
