@@ -31,7 +31,7 @@ def partition_data(input, output, sequenceLength, trainTestRatio=0.8, overlap=25
 
 def esr_loss(target_y, predicted_y):
     mse = tf.keras.losses.MeanSquaredError() 
-    return mse(target_y - predicted_y) / (tf.math.reduce_sum(tf.math.pow(tf.math.abs(y_true), 2)) + 1e-10)
+    return mse(target_y - predicted_y) / (tf.math.reduce_sum(tf.math.pow(tf.math.abs(target_y), 2)) + 1e-10)
 
 def build_model(useD1=True, useC1=True, useC2=True, loss='mae', learningRate=0.008, epsilon=1.e-08, hiddenSize=16, conv1Size=128, conv2Size=2048):
     # Create Sequential Model ###########################################
