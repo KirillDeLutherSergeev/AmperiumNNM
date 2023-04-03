@@ -38,7 +38,7 @@ def LowPass(x, coeff=0.85):
 def esr(target_y, predicted_y): 
     return K.sum(tf.pow(target_y - predicted_y, 2), axis=0) / (K.sum(tf.pow(target_y, 2), axis=0) + 1e-10)
 
-def build_model(useD1=True, useC1=True, useC2=True, loss='mse', learningRate=0.008, epsilon=1.e-08, hiddenSize=16, conv1Size=128, conv2Size=2048):
+def build_model(useD1=True, useC1=True, useC2=True, loss='mse', learningRate=0.008, epsilon=1.e-08, hiddenSize=16, conv1Size=128, conv2Size=2048, showInfo=False):
     # Create Sequential Model ###########################################
     clear_session()
 
@@ -87,7 +87,8 @@ def build_model(useD1=True, useC1=True, useC2=True, loss='mse', learningRate=0.0
 
     model.compile(optimizer=Adam(learning_rate=learningRate, epsilon=epsilon), loss=loss, metrics=[esr])
 
-    model.summary()
+    if showInfo:
+        model.summary()
 
     return(model)
 
