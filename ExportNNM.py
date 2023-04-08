@@ -73,7 +73,7 @@ def make_weights_array(model_to_save, output_scaling_gain=1.0):
 
     return nnm
 
-def export_model_to_nnm(filename, output_scaling_gain, dc_value, model_to_save, model_type = 0, model_name='Untitled', cab_name='Untitled'):
+def export_model_to_nnm(filename, output_scaling_gain, dc_value, model_to_save, model_type = 0, amp_type='CLEAN', model_name='Untitled', cab_name='Untitled'):
     model_name = model_name.ljust(31)[:31]
     cab_name = cab_name.ljust(31)[:31]
 
@@ -81,6 +81,7 @@ def export_model_to_nnm(filename, output_scaling_gain, dc_value, model_to_save, 
 
     header = THeader()
     header.modelType = model_type
+    header.ampType = amp_type
     header.ampInfo = model_name.encode('utf-8')
     header.cabInfo = cab_name.encode('utf-8')
     file.write(header)
