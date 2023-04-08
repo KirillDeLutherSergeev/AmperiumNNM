@@ -81,7 +81,7 @@ def export_model_to_nnm(filename, output_scaling_gain, dc_value, model_to_save, 
 
     header = THeader()
     header.modelType = model_type
-    header.ampType = amp_type
+    header.ampType = amp_type.encode('utf-8')
     header.ampInfo = model_name.encode('utf-8')
     header.cabInfo = cab_name.encode('utf-8')
     file.write(header)
