@@ -138,7 +138,7 @@ class ModelSaverCallback(tf.keras.callbacks.Callback):
             self.best_val_esr = logs['val_esr']
             self.best_model.set_weights(self.model.get_weights())
 
-def train_model(x_train, y_train, x_test, y_test, model, epochs=8, batchSize=64):
+def train_model(x_train, y_train, x_test, y_test, model, epochs=8, batchSize=64, shuffle=True):
     scheduler_clbk = tf.keras.callbacks.LearningRateScheduler(scheduler)
     plateu_clbk = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=5, min_lr=0.001)
     earlystop_clbk = tf.keras.callbacks.EarlyStopping(monitor='val_loss', mode='auto', patience=5, verbose=1)
@@ -148,6 +148,6 @@ def train_model(x_train, y_train, x_test, y_test, model, epochs=8, batchSize=64)
         epochs=epochs, 
         verbose=1,
         batch_size=batchSize,
-        callbacks=[scheduler_clbk, plateu_clbk, earlystop_clbk, modelSaver_clbk], shuffle=True)
+        callbacks=[scheduler_clbk, plateu_clbk, earlystop_clbk, modelSaver_clbk], shuffle=shuffle)
 
     model = modelSaver_clbk.return_best_model()
