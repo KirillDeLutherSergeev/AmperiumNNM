@@ -99,7 +99,7 @@ def build_model(useD1=True, useC1=True, useC2=True, loss='mse', metrics=[esr], l
             use_bias=False,
             name='C2'))
 
-    model.compile(optimizer=Adam(learning_rate=learningRate, epsilon=epsilon), loss=loss, metrics=[esr])
+    model.compile(optimizer=Adam(learning_rate=learningRate, epsilon=epsilon), loss=loss, metrics=metrics)
 
     if showInfo:
         model.summary()
