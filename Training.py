@@ -7,6 +7,9 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.backend import clear_session
 import tensorflow.keras.backend as K
 
+mae = tf.keras.losses.MeanAbsoluteError()
+mse = tf.keras.losses.MeanSquaredError()
+
 def partition_data(input, output, sequenceLength, trainTestRatio=0.8, overlap=256):
     numSamples = np.minimum(input.shape[0], output.shape[0])
     numBatches = math.floor((numSamples - sequenceLength) / overlap)
@@ -38,7 +41,18 @@ def LowPass(x, coeff=0.85):
 def esr(target_y, predicted_y): 
     return K.sum(tf.pow(target_y - predicted_y, 2), axis=0) / (K.sum(tf.pow(target_y, 2), axis=0) + 1e-10)
 
-def build_model(useD1=True, useC1=True, useC2=True, loss='mse', learningRate=0.008, epsilon=1.e-08, hiddenSize=16, conv1Size=128, conv2Size=2048, showInfo=False):
+def mae_emphasized(target_y, predicted_y):
+    return mae(HiPass(target_y), HiPass(predicted_y))
+
+def mse_emphasized(target_y, predicted_y):
+    return mse(HiPass(target_y), HiPass(predicted_y))
+
+def esr_emphasized(target_y, predicted_y):
+    tgtY = HiPass(target_y)
+    predY = HiPass(predicted_y)
+    return K.sum(tf.pow(tgtY - predY, 2), axis=0) / (K.sum(tf.pow(tgtY, 2), axis=0) + 1e-10)
+
+def build_model(useD1=True, useC1=True, useC2=True, loss='mse', metrics=[esr], learningRate=0.008, epsilon=1.e-08, hiddenSize=16, conv1Size=128, conv2Size=2048, showInfo=False):
     # Create Sequential Model ###########################################
     clear_session()
 
