@@ -45,14 +45,14 @@ def mae_emphasized(target_y, predicted_y):
     return mae(HiPass(target_y), HiPass(predicted_y))
 
 def mse_emphasized(target_y, predicted_y):
-    return mae(HiPass(target_y), HiPass(predicted_y))
+    return mse(HiPass(target_y), HiPass(predicted_y))
 
 def esr_emphasized(target_y, predicted_y):
     tgtY = HiPass(target_y)
     predY = HiPass(predicted_y)
     return K.sum(tf.pow(tgtY - predY, 2), axis=0) / (K.sum(tf.pow(tgtY, 2), axis=0) + 1e-10)
 
-def build_model(useD1=True, useC1=True, useC2=True, loss='mse', learningRate=0.008, epsilon=1.e-08, hiddenSize=16, conv1Size=128, conv2Size=2048, showInfo=False):
+def build_model(useD1=True, useC1=True, useC2=True, loss='mse', metrics=[esr], learningRate=0.008, epsilon=1.e-08, hiddenSize=16, conv1Size=128, conv2Size=2048, showInfo=False):
     # Create Sequential Model ###########################################
     clear_session()
 
