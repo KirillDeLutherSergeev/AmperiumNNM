@@ -5,3 +5,6 @@ Use https://colab.research.google.com/github/KirillDeLutherSergeev/AmperiumNNM/b
 
 Plugin to load trained model:
 https://www.st-rock.com/vst/
+
+AMPERIUM NNM HUB
+https://www.st-rock.com/hub.php
