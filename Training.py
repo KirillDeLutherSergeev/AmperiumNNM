@@ -133,7 +133,6 @@ class ModelSaverCallback(tf.keras.callbacks.Callback):
 
     def __init__(self, initial_model, epochs):
         self.best_val_loss = 1000
-        self.best_val_esr = 1000
         self.current_epoch = 0
         self.num_epochs = epochs
         self.batch = 0
@@ -149,7 +148,6 @@ class ModelSaverCallback(tf.keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs=None):
         if logs['val_loss'] < self.best_val_loss:
             self.best_val_loss = logs['val_loss']
-            self.best_val_esr = logs['val_esr']
             self.best_model.set_weights(self.model.get_weights())
 
 def train_model(x_train, y_train, x_test, y_test, model, epochs=8, batchSize=64, shuffle=True):
