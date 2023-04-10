@@ -7,6 +7,9 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.backend import clear_session
 import tensorflow.keras.backend as K
 
+mae = tf.keras.losses.MeanAbsoluteError()
+mse = tf.keras.losses.MeanSquaredError()
+
 def partition_data(input, output, sequenceLength, trainTestRatio=0.8, overlap=256):
     numSamples = np.minimum(input.shape[0], output.shape[0])
     numBatches = math.floor((numSamples - sequenceLength) / overlap)
@@ -37,6 +40,12 @@ def LowPass(x, coeff=0.85):
 
 def esr(target_y, predicted_y): 
     return K.sum(tf.pow(target_y - predicted_y, 2), axis=0) / (K.sum(tf.pow(target_y, 2), axis=0) + 1e-10)
+
+def mae_emphasized(target_y, predicted_y):
+    return mae(HiPass(target_y), HiPass(predicted_y))
+
+def mse_emphasized(target_y, predicted_y):
+    return mae(HiPass(target_y), HiPass(predicted_y))
 
 def esr_emphasized(target_y, predicted_y):
     tgtY = HiPass(target_y)
