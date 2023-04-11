@@ -163,3 +163,6 @@ def train_model(x_train, y_train, x_test, y_test, model, epochs=8, batchSize=64,
         callbacks=[scheduler_clbk, plateu_clbk, earlystop_clbk, modelSaver_clbk], shuffle=shuffle)
 
     model = modelSaver_clbk.return_best_model()
+
+def SetLearningRate(learning_rate=0.008):
+    K.set_value(model.optimizer.learning_rate, learning_rate)
