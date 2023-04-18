@@ -81,11 +81,11 @@ def export_model_to_nnm(filename, output_scaling_gain, dc_value, model_to_save, 
 
     header = THeader()
     header.modelType = model_type
-    header.ampType = amp_type.encode('utf-8')
-    header.ampInfo = model_name.encode('utf-8')
-    header.cabInfo = cab_name.encode('utf-8')
-    header.addInfo1 = add_info1.encode('utf-8')
-    header.addInfo2 = add_info2.encode('utf-8')
+    header.ampType = amp_type[:10].encode('utf-8')
+    header.ampInfo = model_name[:31].encode('utf-8')
+    header.cabInfo = cab_name[:31].encode('utf-8')
+    header.addInfo1 = add_info1[:15].encode('utf-8')
+    header.addInfo2 = add_info2[:15].encode('utf-8')
     file.write(header)
   
     nnm = make_weights_array(model_to_save, output_scaling_gain)
