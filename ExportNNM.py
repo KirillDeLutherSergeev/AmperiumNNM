@@ -53,15 +53,15 @@ def make_weights_array(model_to_save, output_scaling_gain=1.0):
     for num_layer, layer in enumerate(model_to_save.layers):
       if isinstance(layer, tf.keras.layers.Dense):
         if layer.name == 'D1':
-          nnm[1152+32+17:1152+32+17+3] = np.array([0, layer.get_weights()[0][0], output_scaling_gain], c_float)
+          nnm[1152+32+17:1152+32+17+3] = np.array([0, layer.get_weights()[0][0][0], output_scaling_gain], c_float)
 
     nnm[1152+32+17+3] = 1;
 
     for num_layer, layer in enumerate(model_to_save.layers):
       if isinstance(layer, tf.keras.layers.Conv1D):
         if layer.name == 'C1':
-          c1 = MPT(layer.get_weights()[0].flatten())
-          nnm[1152+32+17+3:1152+32+17+3+128] = np.flip(c1)
+          c1 = MPT(layer.get_weights()[0].flatten())#MPT to reduce latency
+          nnm[1152+32+17+3:1152+32+17+3+128] = np.flip(c1)#Flipped for CMSIS convolution on ARM, AmperiumNNM loader reverse this array again
 
     nnm[1152+32+17+3+128] = 1;
 
