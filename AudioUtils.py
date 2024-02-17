@@ -43,7 +43,7 @@ def convert_to_float(signal):
     data_max = np.max(np.abs(signal))
     treshold_float = 10
     treshold_16bit = 32768
-    if (data_max > treshold_float)
+    if (data_max > treshold_float):
         if(data_max <= treshold_16bit):
             scale_factor = 1.0 / treshold_16bit
         else:
