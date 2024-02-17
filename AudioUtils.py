@@ -39,6 +39,20 @@ def calculate_peak_db(signal):
     peak_db = linear_2_db(data_max)
     return peak_db
 
+def convert_to_float(signal):
+    data_max = np.max(np.abs(signal))
+    treshold_float = 10
+    treshold_16bit = 32768
+    if (data_max > treshold_float)
+        if(data_max <= treshold_16bit):
+            scale_factor = 1.0 / treshold_16bit
+        else:
+            if (data_max > treshold_16bit):
+                scale_factor = 1.0 / 2147483648
+    else:
+        scale_factor = 1.0
+    return signal * scale_factor
+
 def load_audio_data(inFile, outFile, offsetSec=1, delay=0):
     # Load and Preprocess Data ###########################################
     in_rate, in_data = wavfile.read(inFile)
@@ -59,8 +73,10 @@ def load_audio_data(inFile, outFile, offsetSec=1, delay=0):
         
     y_all = y_all[offsetOut:]
 
-    x_all = normalize_max_peak(x_all).reshape(len(x_all),1)
-    y_all = normalize_at_minus_3dB(y_all).reshape(len(y_all),1)
+    #x_all = normalize_max_peak(x_all).reshape(len(x_all),1)
+    #y_all = normalize_at_minus_3dB(y_all).reshape(len(y_all),1)
+    x_all = convert_to_float(x_all).reshape(len(x_all),1)
+    y_all = convert_to_float(y_all).reshape(len(y_all),1)
 
     return(x_all, y_all, in_rate)
 
